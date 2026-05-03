@@ -1,55 +1,68 @@
-#include<iostream>
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <string>
 using namespace std;
 
-struct Job{
+struct Job {
     char id;
-    int deadline;
+    int dead;
     int profit;
 };
 
-int main(void){
-    int n;
-    cout<<"Enter Nnumber of Jobs : ";
-    cin>>n;
-    
-    Job jobs[n];
-    
-    cout<<"Enter Job_id, deadline, profit : \n";
-    for(int i=0; i<n; i++)
-        cin>>jobs[i].id>>jobs[i].deadline>>jobs[i].profit;
-    
-    //sort jobs by profit (bubble sort)
-    for(int i=0; i<n-1; i++){
-        for(int j=0; j<n-i-1; j++){
-            if(jobs[j].profit < jobs[j+1].profit){
-                swap(jobs[j],jobs[j+1]);
-            }
-        }
+bool comparison(Job a, Job b) {
+    return (a.profit > b.profit);
+}
+
+void printJobScheduling(vector<Job>& arr) {
+    int n = arr.size();
+    sort(arr.begin(), arr.end(), comparison);
+
+    int maxDead = 0;
+    for (int i = 0; i < n; i++) {
+        if (arr[i].dead > maxDead)
+            maxDead = arr[i].dead;
     }
-    
-    int slot[10]={0}; //time slots
-    char result[10];
-    
-    int total_profit=0;
-    
-    for(int i=0; i<n; i++){
-        for(int j=jobs[i].deadline; j>0; j--){
-            if(slot[j]==0){
-                slot[j]=1;
-                result[j]=jobs[i].id;
-                total_profit += jobs[i].profit;
+
+    vector<int> result(maxDead + 1, -1);
+    vector<char> jobSequence(maxDead + 1, ' ');
+    int countJobs = 0, totalProfit = 0;
+
+    for (int i = 0; i < n; i++) {
+        for (int j = arr[i].dead; j > 0; j--) {
+            if (result[j] == -1) {
+                result[j] = i;
+                jobSequence[j] = arr[i].id;
+                countJobs++;
+                totalProfit += arr[i].profit;
                 break;
             }
         }
     }
-    
-    cout<<"Selected Jobs : \n";
-    for(int i=1; i<10; i++){
-        if(slot[i])
-            cout << result[i] << " ";
+
+    cout << "\nNumber of jobs done: " << countJobs << endl;
+    cout << "Total Profit: " << totalProfit << endl;
+    cout << "Job Sequence: ";
+    for (int i = 1; i <= maxDead; i++) {
+        if (jobSequence[i] != ' ')
+            cout << jobSequence[i] << " ";
     }
-    
-    cout<<"\nTotal Profit : "<<total_profit;
+    cout << endl;
+}
+
+int main() {
+    int n;
+    cout << "Job Sequencing with Deadlines" << endl;
+    cout << "Enter the number of jobs: ";
+    cin >> n;
+
+    vector<Job> arr(n);
+    cout << "Enter Job ID (char), Deadline (int), and Profit (int) for each job:" << endl;
+    for (int i = 0; i < n; i++) {
+        cout << "Job " << i + 1 << ": ";
+        cin >> arr[i].id >> arr[i].dead >> arr[i].profit;
+    }
+
+    printJobScheduling(arr);
     return 0;
-    
 }

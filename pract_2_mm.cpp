@@ -1,55 +1,71 @@
-#include<iostream>
+#include <iostream>
+#include <vector>
 using namespace std;
 
-struct Pair{
-    int min;
+struct Pair {
     int max;
+    int min;
 };
 
-Pair find_min_max(int arr[], int low, int high){
-    Pair p, left, right;
-    
-    //only one element
-    if (low==high){
-        p.max=p.min=arr[low];
-        return p;
+Pair getMinMax(const vector<int>& arr, int low, int high) {
+    Pair minmax, leftPair, rightPair;
+    int mid;
+
+    if (low == high) {
+        minmax.max = arr[low];
+        minmax.min = arr[low];
+        return minmax;
     }
-    
-    //two elements
-    if(high==low+1){
-        if(arr[low]>arr[high]){
-            p.min = arr[high];
-            p.max = arr[low];
-        }else{
-            p.min = arr[low];
-            p.max = arr[high];
+
+    if (high == low + 1) {
+        if (arr[low] > arr[high]) {
+            minmax.max = arr[low];
+            minmax.min = arr[high];
+        } else {
+            minmax.max = arr[high];
+            minmax.min = arr[low];
         }
-        return p;
+        return minmax;
     }
-    
-    //more than 2 elements
-    int mid = (low+high)/2;
-    left = find_min_max(arr,low,mid);
-    right = find_min_max(arr,mid+1,high);
-    p.min = (left.min < right.min) ? left.min : right.min;
-    p.max = (left.max > right.max) ? left.max : right.max;
-    
-    return p;
+
+    mid = (low + high) / 2;
+    leftPair = getMinMax(arr, low, mid);
+    rightPair = getMinMax(arr, mid + 1, high);
+
+    if (leftPair.max > rightPair.max)
+        minmax.max = leftPair.max;
+    else
+        minmax.max = rightPair.max;
+
+    if (leftPair.min < rightPair.min)
+        minmax.min = leftPair.min;
+    else
+        minmax.min = rightPair.min;
+
+    return minmax;
 }
 
-
-int main(void){
+int main() {
     int n;
-    cout<< "Enter range of array : ";
+    cout << "Enter the number of elements: ";
     cin >> n;
-    
-    int arr[n];
-    cout << "Enter elements of array : ";
-    for (int i=0; i<n; i++){
+
+    if (n <= 0) {
+        cout << "Invalid array size." << endl;
+        return 0;
+    }
+
+    vector<int> arr(n);
+    cout << "Enter " << n << " elements: " << endl;
+    for (int i = 0; i < n; i++) {
         cin >> arr[i];
     }
-    
-    Pair result = find_min_max(arr,0,n-1);
-    cout<< "Minimum value is : " << result.min << endl;
-    cout<< "Maximum value is : " << result.max;
+
+    Pair result = getMinMax(arr, 0, n - 1);
+
+    cout << "\n--- Results ---" << endl;
+    cout << "Maximum element: " << result.max << endl;
+    cout << "Minimum element: " << result.min << endl;
+
+    return 0;
 }

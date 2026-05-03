@@ -1,48 +1,76 @@
-#include<iostream>
+#include <iostream>
+#include <vector>
 using namespace std;
 
-void merge(int arr[], int l, int m, int r){
-    int i=l, j=m+1, k=0;
-    int tmp[100];
-    
-    while(i<=m && j<=r){
-        if(arr[i] < arr[j])
-            tmp[k++] = arr[i++];
-        else
-            tmp[k++]=arr[j++];
+void merge(vector<int>& arr, int low, int mid, int high) {
+    int n1 = mid - low + 1;
+    int n2 = high - mid;
+
+    vector<int> L(n1), R(n2);
+
+    for (int i = 0; i < n1; i++)
+        L[i] = arr[low + i];
+    for (int j = 0; j < n2; j++)
+        R[j] = arr[mid + 1 + j];
+
+    int i = 0, j = 0, k = low;
+    while (i < n1 && j < n2) {
+        if (L[i] <= R[j]) {
+            arr[k] = L[i];
+            i++;
+        } else {
+            arr[k] = R[j];
+            j++;
+        }
+        k++;
     }
-    
-    while(i<=m) tmp[k++] = arr[i++];
-    while(j<=r) tmp[k++] = arr[j++];
-    
-    for(int i=l,k=0; i<=r;i++,k++)
-        arr[i] = tmp[k];
+
+    while (i < n1) {
+        arr[k] = L[i];
+        i++;
+        k++;
+    }
+
+    while (j < n2) {
+        arr[k] = R[j];
+        j++;
+        k++;
+    }
 }
 
-void merge_sort(int arr[], int l, int r){
-    if (l<r){
-        int m = (l+r)/2;
-        merge_sort(arr,l,m);
-        merge_sort(arr,m+1,r);
-        merge(arr,l,m,r);
+void mergeSort(vector<int>& arr, int low, int high) {
+    if (low < high) {
+        int mid = low + (high - low) / 2;
+        mergeSort(arr, low, mid);
+        mergeSort(arr, mid + 1, high);
+        merge(arr, low, mid, high);
     }
 }
 
-int main(void){
+void printArray(const vector<int>& arr) {
+    for (int num : arr)
+        cout << num << " ";
+    cout << endl;
+}
+
+int main() {
     int n;
-    cout<<"enter range of array : ";
-    cin>>n;
-    int arr[n];
-    
-    cout<<"Enter values for array :";
-    for(int i=0; i<n; i++){
-        cin>>arr[i];
+    cout << "Enter number of elements: ";
+    cin >> n;
+
+    vector<int> arr(n);
+    cout << "Enter " << n << " elements: " << endl;
+    for (int i = 0; i < n; i++) {
+        cin >> arr[i];
     }
-    
-    merge_sort(arr,0,n-1);
-    
-    cout<<"Sorted array : ";
-    for(int i=0; i<n; i++){
-        cout<<arr[i]<<" ";
-    }
+
+    cout << "\nOriginal array: ";
+    printArray(arr);
+
+    mergeSort(arr, 0, n - 1);
+
+    cout << "Sorted array: ";
+    printArray(arr);
+
+    return 0;
 }

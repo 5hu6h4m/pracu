@@ -1,40 +1,44 @@
-#include<iostream>
+#include <iostream>
+#include <vector>
+#include <algorithm>
 using namespace std;
 
-int binary_search(int arr[], int n, int key){
-    int low=0, high=n-1,mid;
-    while(low<=high){
-        mid = (high+low)/2;
-        if(arr[mid]==key){
+int binarySearch(const vector<int>& arr, int target) {
+    int low = 0;
+    int high = arr.size() - 1;
+    while (low <= high) {
+        int mid = low + (high - low) / 2;
+        if (arr[mid] == target) {
             return mid;
-        }else if(arr[mid]<key){
-            low=mid+1;
-        }else{
-            high=mid-1;
+        }
+        if (arr[mid] < target) {
+            low = mid + 1;
+        } else {
+            high = mid - 1;
         }
     }
+    return -1;
 }
 
-int main(void){
-    int n,key;
-    cout << "Enter range of array : ";
+int main() {
+    int n, target;
+    cout << "Enter number of elements: ";
     cin >> n;
-
-    int arr[n];
-
-    cout << "Enter elements in sorted order : ";
-    for(int i=0; i<n; i++){
-        cin >> arr[i];
+    vector<int> data(n);
+    cout << "Enter " << n << " integers: " << endl;
+    for (int i = 0; i < n; i++) {
+        cin >> data[i];
     }
-
-    cout << "Enter key to search : ";
-    cin >> key;
-
-    int result = binary_search(arr,n,key);
-
-    if (result != -1){
-        cout << "Key found in array at index : " << result;
-    }else{
-        cout << "Key not found !";
+    sort(data.begin(), data.end());
+    cout << "\nSorted array: ";
+    for (int num : data) cout << num << " ";
+    cout << "\n\nEnter the element to search for: ";
+    cin >> target;
+    int result = binarySearch(data, target);
+    if (result != -1) {
+        cout << "Element found at index " << result << " (in the sorted array)." << endl;
+    } else {
+        cout << "Element not found in the array." << endl;
     }
+    return 0;
 }
