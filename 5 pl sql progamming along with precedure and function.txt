@@ -1,0 +1,63 @@
+SET SERVEROUTPUT ON;
+
+
+CREATE TABLE Student (
+    Roll_No NUMBER PRIMARY KEY,
+    Name VARCHAR2(50),
+    Marks NUMBER
+);
+
+
+INSERT INTO Student VALUES (1, 'Shivam', 85);
+INSERT INTO Student VALUES (2, 'Rahul', 75);
+INSERT INTO Student VALUES (3, 'Amit', 90);
+
+COMMIT;
+
+
+CREATE OR REPLACE PROCEDURE Display_Student AS
+BEGIN
+    FOR rec IN (SELECT * FROM Student) LOOP
+        DBMS_OUTPUT.PUT_LINE(
+            'Roll No: ' || rec.Roll_No ||
+            ' Name: ' || rec.Name ||
+            ' Marks: ' || rec.Marks
+        );
+    END LOOP;
+END;
+/
+
+
+BEGIN
+    Display_Student;
+END;
+/
+
+
+CREATE OR REPLACE FUNCTION Get_Total_Marks
+RETURN NUMBER
+AS
+    total NUMBER;
+BEGIN
+    SELECT SUM(Marks)
+    INTO total
+    FROM Student;
+
+    RETURN total;
+END;
+/
+
+
+DECLARE
+    result NUMBER;
+BEGIN
+    result := Get_Total_Marks();
+
+    DBMS_OUTPUT.PUT_LINE(
+        'Total Marks: ' || result
+    );
+END;
+/
+
+
+SELECT * FROM Student;

@@ -1,0 +1,60 @@
+SET SERVEROUTPUT ON;
+
+
+CREATE TABLE Student (
+    Roll_No NUMBER PRIMARY KEY,
+    Name VARCHAR2(50),
+    Marks NUMBER
+);
+
+
+INSERT INTO Student VALUES (1, 'Shivam', 85);
+INSERT INTO Student VALUES (2, 'Rahul', 75);
+INSERT INTO Student VALUES (3, 'Amit', 90);
+
+
+CREATE TABLE Student_Backup (
+    Roll_No NUMBER,
+    Name VARCHAR2(50),
+    Marks NUMBER
+);
+
+
+DECLARE
+    CURSOR C1 IS
+        SELECT Roll_No, Name, Marks FROM Student;
+
+    v_roll Student.Roll_No%TYPE;
+    v_name Student.Name%TYPE;
+    v_marks Student.Marks%TYPE;
+
+BEGIN
+    OPEN C1;
+
+    LOOP
+        FETCH C1 INTO v_roll, v_name, v_marks;
+
+        EXIT WHEN C1%NOTFOUND;
+
+        INSERT INTO Student_Backup
+        VALUES (v_roll, v_name, v_marks);
+
+        DBMS_OUTPUT.PUT_LINE(
+            'Record Transferred: ' || v_name
+        );
+    END LOOP;
+
+    CLOSE C1;
+
+    COMMIT;
+
+    DBMS_OUTPUT.PUT_LINE('Data Transfer Completed');
+
+END;
+/
+
+
+SELECT * FROM Student;
+
+
+SELECT * FROM Student_Backup;

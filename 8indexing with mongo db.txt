@@ -1,0 +1,69 @@
+
+use CollegeDB;
+
+
+db.createCollection("Student");
+
+
+db.Student.insertMany([
+    {
+        Roll_No: 101,
+        Name: "Shivam",
+        Age: 21,
+        City: "Pune",
+        Marks: 85
+    },
+    {
+        Roll_No: 102,
+        Name: "Rahul",
+        Age: 20,
+        City: "Mumbai",
+        Marks: 75
+    },
+    {
+        Roll_No: 103,
+        Name: "Amit",
+        Age: 22,
+        City: "Nashik",
+        Marks: 90
+    },
+    {
+        Roll_No: 104,
+        Name: "Priya",
+        Age: 21,
+        City: "Pune",
+        Marks: 65
+    }
+]);
+
+
+db.Student.createIndex({ Name: 1 });
+
+
+db.Student.createIndex({ Marks: -1 });
+
+
+db.Student.createIndex({ City: 1, Marks: -1 });
+
+
+db.Student.createIndex(
+    { Roll_No: 1 },
+    { unique: true }
+);
+
+
+db.Student.getIndexes();
+
+
+db.Student.find({ Name: "Shivam" });
+
+db.Student.find({ Name: "Shivam" }).explain("executionStats");
+
+
+db.Student.dropIndex({ Name: 1 });
+
+
+db.Student.getIndexes();
+
+
+db.Student.find();

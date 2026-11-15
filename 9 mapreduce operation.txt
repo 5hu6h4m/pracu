@@ -1,0 +1,36 @@
+
+use CollegeDB;
+
+
+db.createCollection("Student");
+
+
+db.Student.insertMany([
+    { Roll_No: 101, Name: "Shivam", Dept: "Computer", Marks: 85 },
+    { Roll_No: 102, Name: "Rahul", Dept: "IT", Marks: 75 },
+    { Roll_No: 103, Name: "Amit", Dept: "Computer", Marks: 90 },
+    { Roll_No: 104, Name: "Priya", Dept: "IT", Marks: 65 },
+    { Roll_No: 105, Name: "Sneha", Dept: "Computer", Marks: 80 }
+]);
+
+
+var mapFunction = function() {
+    emit(this.Dept, this.Marks);
+};
+
+
+var reduceFunction = function(key, values) {
+    return Array.sum(values);
+};
+
+
+db.Student.mapReduce(
+    mapFunction,
+    reduceFunction,
+    {
+        out: "Department_Total_Marks"
+    }
+);
+
+
+db.Department_Total_Marks.find();

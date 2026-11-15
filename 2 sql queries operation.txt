@@ -1,0 +1,143 @@
+
+CREATE DATABASE College;
+USE College;
+
+CREATE TABLE Department (
+    Dept_ID INT PRIMARY KEY,
+    Dept_Name VARCHAR(50)
+);
+
+CREATE TABLE Student (
+    Roll_No INT PRIMARY KEY,
+    Name VARCHAR(50),
+    Age INT,
+    City VARCHAR(50),
+    Marks INT,
+    Dept_ID INT,
+    FOREIGN KEY (Dept_ID) REFERENCES Department(Dept_ID)
+);
+
+
+INSERT INTO Department VALUES
+(1, 'Computer'),
+(2, 'IT'),
+(3, 'Mechanical');
+
+INSERT INTO Student VALUES
+(101, 'Shivam', 21, 'Pune', 85, 1),
+(102, 'Rahul', 20, 'Mumbai', 75, 2),
+(103, 'Amit', 22, 'Nashik', 90, 1),
+(104, 'Priya', 21, 'Pune', 65, 3),
+(105, 'Sneha', 20, 'Mumbai', 80, 2);
+
+
+SELECT * FROM Student;
+
+SELECT Name, Marks FROM Student;
+
+SELECT * FROM Student WHERE Marks > 75;
+
+SELECT * FROM Student ORDER BY Marks DESC;
+
+SELECT DISTINCT City FROM Student;
+
+
+SELECT * FROM Student WHERE Marks BETWEEN 70 AND 90;
+
+SELECT * FROM Student WHERE City IN ('Pune', 'Mumbai');
+
+SELECT * FROM Student WHERE Name LIKE 'S%';
+
+SELECT * FROM Student WHERE Age > 20 AND Marks > 70;
+
+SELECT * FROM Student WHERE City = 'Pune' OR City = 'Mumbai';
+
+SELECT * FROM Student WHERE NOT City = 'Pune';
+
+
+UPDATE Student
+SET Marks = 95
+WHERE Roll_No = 101;
+
+DELETE FROM Student
+WHERE Roll_No = 105;
+
+
+ALTER TABLE Student ADD Email VARCHAR(100);
+
+
+SELECT COUNT(*) FROM Student;
+
+SELECT SUM(Marks) FROM Student;
+
+SELECT AVG(Marks) FROM Student;
+
+SELECT MAX(Marks) FROM Student;
+
+SELECT MIN(Marks) FROM Student;
+
+
+SELECT Dept_ID, AVG(Marks)
+FROM Student
+GROUP BY Dept_ID;
+
+SELECT Dept_ID, AVG(Marks)
+FROM Student
+GROUP BY Dept_ID
+HAVING AVG(Marks) > 70;
+
+
+SELECT Student.Name, Department.Dept_Name
+FROM Student
+INNER JOIN Department
+ON Student.Dept_ID = Department.Dept_ID;
+
+
+SELECT Student.Name, Department.Dept_Name
+FROM Student
+LEFT JOIN Department
+ON Student.Dept_ID = Department.Dept_ID;
+
+
+SELECT Student.Name, Department.Dept_Name
+FROM Student
+RIGHT JOIN Department
+ON Student.Dept_ID = Department.Dept_ID;
+
+
+SELECT Student.Name, Department.Dept_Name
+FROM Student
+CROSS JOIN Department;
+
+
+SELECT * FROM Student
+WHERE Marks > (SELECT AVG(Marks) FROM Student);
+
+SELECT * FROM Student
+WHERE Marks = (SELECT MAX(Marks) FROM Student);
+
+SELECT * FROM Student
+WHERE Dept_ID = (
+    SELECT Dept_ID FROM Department
+    WHERE Dept_Name = 'Computer'
+);
+
+
+START TRANSACTION;
+
+UPDATE Student
+SET Marks = 88
+WHERE Roll_No = 102;
+
+COMMIT;
+
+START TRANSACTION;
+
+DELETE FROM Student WHERE Roll_No = 104;
+
+ROLLBACK;
+
+
+SELECT * FROM Student;
+
+SELECT * FROM Department;

@@ -1,0 +1,71 @@
+
+use CollegeDB;
+
+
+db.createCollection("Student");
+
+
+db.Student.insertMany([
+    {
+        Roll_No: 101,
+        Name: "Shivam",
+        Age: 21,
+        City: "Pune",
+        Marks: 85
+    },
+    {
+        Roll_No: 102,
+        Name: "Rahul",
+        Age: 20,
+        City: "Mumbai",
+        Marks: 75
+    },
+    {
+        Roll_No: 103,
+        Name: "Amit",
+        Age: 22,
+        City: "Nashik",
+        Marks: 90
+    },
+    {
+        Roll_No: 104,
+        Name: "Priya",
+        Age: 21,
+        City: "Pune",
+        Marks: 65
+    }
+]);
+
+
+db.Student.find();
+
+db.Student.find({ City: "Pune" });
+
+db.Student.find({ Marks: { $gt: 75 } });
+
+
+db.Student.updateOne(
+    { Roll_No: 101 },
+    { $set: { Marks: 95 } }
+);
+
+
+db.Student.updateMany(
+    { City: "Pune" },
+    { $set: { City: "Mumbai" } }
+);
+
+
+db.Student.deleteOne({ Roll_No: 104 });
+
+
+db.Student.deleteMany({ Marks: { $lt: 70 } });
+
+
+db.Student.find().sort({ Marks: -1 });
+
+
+db.Student.countDocuments();
+
+
+db.Student.find();

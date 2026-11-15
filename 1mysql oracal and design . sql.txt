@@ -1,0 +1,37 @@
+
+CREATE DATABASE College;
+
+
+USE College;
+
+
+CREATE TABLE Student (
+    Roll_No INT PRIMARY KEY,	
+    Name VARCHAR(50),
+    Age INT,
+    City VARCHAR(50)
+);
+
+
+INSERT INTO Student VALUES
+(1, 'Shivam', 21, 'Aurangabad'),
+(2, 'Rahul', 20, 'Pune'),
+(3, 'Amit', 22, 'Mumbai');
+
+
+SELECT * FROM Student;
+
+
+SELECT * FROM Student WHERE Age > 20;
+
+
+UPDATE Student
+SET City = 'Nashik'
+WHERE Roll_No = 1;
+
+
+DELETE FROM Student
+WHERE Roll_No = 3;
+
+
+SELECT * FROM Student;

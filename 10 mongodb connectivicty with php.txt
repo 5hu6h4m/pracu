@@ -1,0 +1,53 @@
+<?php
+
+
+require_once __DIR__ . '/vendor/autoload.php';
+
+$client = new MongoDB\Client("mongodb://localhost:27017");
+
+
+$db = $client->CollegeDB;
+
+
+$collection = $db->Student;
+
+
+$insert = $collection->insertOne([
+    'Roll_No' => 101,
+    'Name' => 'Shivam',
+    'Age' => 21,
+    'City' => 'Pune',
+    'Marks' => 85
+]);
+
+echo "Record Inserted Successfully!<br><br>";
+
+
+echo "<b>Student Records:</b><br>";
+
+$result = $collection->find();
+
+foreach ($result as $student) {
+    echo "Roll No: " . $student['Roll_No'] . "<br>";
+    echo "Name: " . $student['Name'] . "<br>";
+    echo "Age: " . $student['Age'] . "<br>";
+    echo "City: " . $student['City'] . "<br>";
+    echo "Marks: " . $student['Marks'] . "<br><br>";
+}
+
+
+$collection->updateOne(
+    ['Roll_No' => 101],
+    ['$set' => ['Marks' => 95]]
+);
+
+echo "Record Updated Successfully!<br><br>";
+
+
+$collection->deleteOne([
+    'Roll_No' => 101
+]);
+
+echo "Record Deleted Successfully!";
+
+?>

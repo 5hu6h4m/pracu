@@ -1,0 +1,67 @@
+SET SERVEROUTPUT ON;
+
+DECLARE
+    num NUMBER := 10;
+    i NUMBER;
+    marks NUMBER := 75;
+
+BEGIN
+    
+    IF marks >= 40 THEN
+        DBMS_OUTPUT.PUT_LINE('Student is Pass');
+    ELSE
+        DBMS_OUTPUT.PUT_LINE('Student is Fail');
+    END IF;
+
+    
+    IF marks >= 75 THEN
+        DBMS_OUTPUT.PUT_LINE('Grade A');
+    ELSIF marks >= 60 THEN
+        DBMS_OUTPUT.PUT_LINE('Grade B');
+    ELSIF marks >= 40 THEN
+        DBMS_OUTPUT.PUT_LINE('Grade C');
+    ELSE
+        DBMS_OUTPUT.PUT_LINE('Grade F');
+    END IF;
+
+    
+    i := 1;
+    LOOP
+        DBMS_OUTPUT.PUT_LINE('Simple Loop: ' || i);
+        i := i + 1;
+        EXIT WHEN i > 5;
+    END LOOP;
+
+    i := 1;
+    WHILE i <= 5 LOOP
+        DBMS_OUTPUT.PUT_LINE('While Loop: ' || i);
+        i := i + 1;
+    END LOOP;
+
+    
+    FOR i IN 1..5 LOOP
+        DBMS_OUTPUT.PUT_LINE('For Loop: ' || i);
+    END LOOP;
+
+    
+    CASE
+        WHEN marks >= 75 THEN
+            DBMS_OUTPUT.PUT_LINE('Excellent');
+        WHEN marks >= 50 THEN
+            DBMS_OUTPUT.PUT_LINE('Good');
+        ELSE
+            DBMS_OUTPUT.PUT_LINE('Needs Improvement');
+    END CASE;
+
+    
+    BEGIN
+        num := 10 / 0;
+    EXCEPTION
+        WHEN ZERO_DIVIDE THEN
+            DBMS_OUTPUT.PUT_LINE('Error: Division by Zero');
+        WHEN OTHERS THEN
+            DBMS_OUTPUT.PUT_LINE('Some Error Occurred');
+    END;
+
+END;
+/

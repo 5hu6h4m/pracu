@@ -1,0 +1,55 @@
+SET SERVEROUTPUT ON;
+
+
+CREATE TABLE Student (
+    Roll_No NUMBER PRIMARY KEY,
+    Name VARCHAR2(50),
+    Marks NUMBER
+);
+
+
+INSERT INTO Student VALUES (1, 'Shivam', 85);
+INSERT INTO Student VALUES (2, 'Rahul', 75);
+INSERT INTO Student VALUES (3, 'Amit', 90);
+
+COMMIT;
+
+
+CREATE TABLE Student_Audit (
+    Roll_No NUMBER,
+    Name VARCHAR2(50),
+    Old_Marks NUMBER,
+    New_Marks NUMBER,
+    Updated_Date DATE
+);
+
+
+CREATE OR REPLACE TRIGGER Student_Update_Trigger
+AFTER UPDATE ON Student
+FOR EACH ROW
+BEGIN
+    INSERT INTO Student_Audit
+    VALUES (
+        :OLD.Roll_No,
+        :OLD.Name,
+        :OLD.Marks,
+        :NEW.Marks,
+        SYSDATE
+    );
+
+    DBMS_OUTPUT.PUT_LINE('Student Record Updated');
+END;
+/
+
+
+UPDATE Student
+SET Marks = 95
+WHERE Roll_No = 1;
+
+COMMIT;
+
+
+SELECT * FROM Student;
+
+
+SELECT * FROM Student_Audit;
